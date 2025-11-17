@@ -49,6 +49,7 @@
             buttonLoadNormalMap = new Button();
             buttonChooseColor = new Button();
             buttonLoadControlPoints = new Button();
+            buttonChooseLightColor = new Button();
             labelDivisions = new Label();
             labelAlpha = new Label();
             labelBeta = new Label();
@@ -56,6 +57,9 @@
             labelKs = new Label();
             labelM = new Label();
             labelLightZ = new Label();
+            labelEnergyConservation = new Label();
+            labelKdNormalized = new Label();
+            labelKsNormalized = new Label();
             animationTimer = new System.Windows.Forms.Timer(components);
             groupBoxDisplay = new GroupBox();
             groupBoxRotation = new GroupBox();
@@ -123,6 +127,7 @@
             trackBarKd.Size = new Size(200, 45);
             trackBarKd.TabIndex = 0;
             trackBarKd.Value = 50;
+            trackBarKd.Scroll += trackBarKd_Scroll;
             // 
             // trackBarKs
             // 
@@ -151,7 +156,7 @@
             trackBarLightZ.Name = "trackBarLightZ";
             trackBarLightZ.Size = new Size(200, 45);
             trackBarLightZ.TabIndex = 0;
-            trackBarLightZ.Value = 50;
+            trackBarLightZ.Value = 20;
             // 
             // checkBoxPolygon
             // 
@@ -206,7 +211,7 @@
             checkBoxShowLight.CheckState = CheckState.Checked;
             checkBoxShowLight.Location = new Point(6, 120);
             checkBoxShowLight.Name = "checkBoxShowLight";
-            checkBoxShowLight.Size = new Size(82, 19);
+            checkBoxShowLight.Size = new Size(85, 19);
             checkBoxShowLight.TabIndex = 2;
             checkBoxShowLight.Text = "Show Light";
             checkBoxShowLight.UseVisualStyleBackColor = true;
@@ -279,6 +284,15 @@
             buttonLoadControlPoints.Text = "Load Control Points";
             buttonLoadControlPoints.UseVisualStyleBackColor = true;
             // 
+            // buttonChooseLightColor
+            // 
+            buttonChooseLightColor.Location = new Point(6, 145);
+            buttonChooseLightColor.Name = "buttonChooseLightColor";
+            buttonChooseLightColor.Size = new Size(120, 23);
+            buttonChooseLightColor.TabIndex = 3;
+            buttonChooseLightColor.Text = "Light Color";
+            buttonChooseLightColor.UseVisualStyleBackColor = true;
+            // 
             // labelDivisions
             // 
             labelDivisions.AutoSize = true;
@@ -340,7 +354,38 @@
             labelLightZ.Name = "labelLightZ";
             labelLightZ.Size = new Size(62, 15);
             labelLightZ.TabIndex = 1;
-            labelLightZ.Text = "Light Z: 50";
+            labelLightZ.Text = "Light Z: 20";
+            // 
+            // labelEnergyConservation
+            // 
+            labelEnergyConservation.AutoSize = true;
+            labelEnergyConservation.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            labelEnergyConservation.ForeColor = Color.DarkOrange;
+            labelEnergyConservation.Location = new Point(17, 203);
+            labelEnergyConservation.Name = "labelEnergyConservation";
+            labelEnergyConservation.Size = new Size(0, 15);
+            labelEnergyConservation.TabIndex = 6;
+            labelEnergyConservation.Visible = false;
+            // 
+            // labelKdNormalized
+            // 
+            labelKdNormalized.AutoSize = true;
+            labelKdNormalized.ForeColor = Color.Gray;
+            labelKdNormalized.Location = new Point(110, 20);
+            labelKdNormalized.Name = "labelKdNormalized";
+            labelKdNormalized.Size = new Size(0, 15);
+            labelKdNormalized.TabIndex = 7;
+            labelKdNormalized.Visible = false;
+            // 
+            // labelKsNormalized
+            // 
+            labelKsNormalized.AutoSize = true;
+            labelKsNormalized.ForeColor = Color.Gray;
+            labelKsNormalized.Location = new Point(110, 80);
+            labelKsNormalized.Name = "labelKsNormalized";
+            labelKsNormalized.Size = new Size(0, 15);
+            labelKsNormalized.TabIndex = 8;
+            labelKsNormalized.Visible = false;
             // 
             // animationTimer
             // 
@@ -376,14 +421,17 @@
             // groupBoxLighting
             // 
             groupBoxLighting.Controls.Add(labelKd);
+            groupBoxLighting.Controls.Add(labelKdNormalized);
             groupBoxLighting.Controls.Add(trackBarKd);
             groupBoxLighting.Controls.Add(labelKs);
+            groupBoxLighting.Controls.Add(labelKsNormalized);
             groupBoxLighting.Controls.Add(trackBarKs);
+            groupBoxLighting.Controls.Add(labelEnergyConservation);
             groupBoxLighting.Controls.Add(labelM);
             groupBoxLighting.Controls.Add(trackBarM);
             groupBoxLighting.Location = new Point(630, 381);
             groupBoxLighting.Name = "groupBoxLighting";
-            groupBoxLighting.Size = new Size(220, 210);
+            groupBoxLighting.Size = new Size(220, 235);
             groupBoxLighting.TabIndex = 23;
             groupBoxLighting.TabStop = false;
             groupBoxLighting.Text = "Lighting Parameters";
@@ -409,9 +457,10 @@
             groupBoxLight.Controls.Add(trackBarLightZ);
             groupBoxLight.Controls.Add(checkBoxAnimateLight);
             groupBoxLight.Controls.Add(checkBoxShowLight);
+            groupBoxLight.Controls.Add(buttonChooseLightColor);
             groupBoxLight.Location = new Point(860, 190);
             groupBoxLight.Name = "groupBoxLight";
-            groupBoxLight.Size = new Size(220, 150);
+            groupBoxLight.Size = new Size(220, 180);
             groupBoxLight.TabIndex = 25;
             groupBoxLight.TabStop = false;
             groupBoxLight.Text = "Light Source";
@@ -473,6 +522,7 @@
         private Button buttonLoadNormalMap;
         private Button buttonChooseColor;
         private Button buttonLoadControlPoints;
+        private Button buttonChooseLightColor;
         private Label labelDivisions;
         private Label labelAlpha;
         private Label labelBeta;
@@ -480,6 +530,9 @@
         private Label labelKs;
         private Label labelM;
         private Label labelLightZ;
+        private Label labelEnergyConservation;
+        private Label labelKdNormalized;
+        private Label labelKsNormalized;
         private System.Windows.Forms.Timer animationTimer;
         private GroupBox groupBoxDisplay;
         private GroupBox groupBoxRotation;

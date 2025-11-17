@@ -44,14 +44,28 @@ namespace BezierSurface
             if (R.LengthSquared() > 0)
                 R = Vector3.Normalize(R);
 
-            // Diffuse component
-            float diffuse = Math.Max(0, NdotL);
-            Vector3 diffuseColor = Kd * LightColor * objectColor * diffuse;
+            // Enforce energy conservation
+            float kd = Kd;
+            float ks = Ks;
+            float sum = kd + ks;
+            if (sum > 1.0f)
+            {
+                float invSum = 1.0f / sum;
+                kd *= invSum;
+                ks *= invSum;
+            }
 
-            // Specular component
+            // Use component-wise multiplication but add some color mixing
+            Vector3 colorMixed = LightColor * objectColor;
+
+            // Diffuse component - blend light color with object color
+            float diffuse = Math.Max(0, NdotL);
+            Vector3 diffuseColor = kd * colorMixed * diffuse;
+
+            // Specular component - use light color more directly for highlights
             float VdotR = Vector3.Dot(V, R);
             float specular = (float)Math.Pow(Math.Max(0, VdotR), M);
-            Vector3 specularColor = Ks * LightColor * objectColor * specular;
+            Vector3 specularColor = ks * colorMixed * specular;
 
             // Final color (in 0-1 range)
             Vector3 finalColor = diffuseColor + specularColor;
@@ -71,13 +85,13 @@ namespace BezierSurface
             // Get normal from normal map
             Vector3 normalFromMap = GetNormalFromMap(normalMap, u, v);
 
-            // Normalize tangent vectors
-            Vector3 T = Vector3.Normalize(Pu);
-            Vector3 B = Vector3.Normalize(Pv);
+            // Build orthonormal TBN basis
             Vector3 N = Vector3.Normalize(surfaceNormal);
+            Vector3 T = Vector3.Normalize(-Pu);
+            Vector3 B = -Vector3.Normalize(Vector3.Cross(T, N));
 
             // Create TBN matrix (tangent space to world space)
-            // M = [Pu | Pv | N]
+            // Matrix columns are the basis vectors: [T | B | N]
             Matrix4x4 TBN = new Matrix4x4(
                 T.X, B.X, N.X, 0,
                 T.Y, B.Y, N.Y, 0,
