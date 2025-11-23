@@ -2,22 +2,15 @@ using System.Numerics;
 
 namespace BezierSurface
 {
-    /// <summary>
-    /// Generates triangle mesh from Bézier surface
-    /// </summary>
     public class TriangleMesh
     {
         public List<Triangle> Triangles { get; private set; } = new List<Triangle>();
         public Vertex[,] Vertices { get; private set; }
 
-        /// <summary>
-        /// Generate mesh by triangulating the Bézier surface
-        /// </summary>
         public void Generate(BezierSurface surface, int divisions)
         {
             Triangles.Clear();
 
-            // Create grid of vertices
             int gridSize = divisions + 1;
             Vertices = new Vertex[gridSize, gridSize];
 
@@ -31,20 +24,16 @@ namespace BezierSurface
                 }
             }
 
-            // Create triangles
             for (int i = 0; i < divisions; i++)
             {
                 for (int j = 0; j < divisions; j++)
                 {
-                    // Two triangles per quad
-                    // Triangle 1
                     Triangles.Add(new Triangle(
                         Vertices[i, j],
                         Vertices[i + 1, j],
                         Vertices[i, j + 1]
                     ));
 
-                    // Triangle 2
                     Triangles.Add(new Triangle(
                         Vertices[i + 1, j],
                         Vertices[i + 1, j + 1],
@@ -54,9 +43,6 @@ namespace BezierSurface
             }
         }
 
-        /// <summary>
-        /// Transform all vertices in the mesh
-        /// </summary>
         public void Transform(float alpha, float beta)
         {
             if (Vertices == null) return;
@@ -70,14 +56,10 @@ namespace BezierSurface
             }
         }
 
-        /// <summary>
-        /// Get control points for drawing the Bézier polygon
-        /// </summary>
         public List<Vector3> GetControlPolygon(BezierSurface surface)
         {
             var points = new List<Vector3>();
 
-            // Add control points in grid order
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)

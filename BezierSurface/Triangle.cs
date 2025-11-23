@@ -1,8 +1,5 @@
 namespace BezierSurface
 {
-    /// <summary>
-    /// Represents a triangle in the mesh
-    /// </summary>
     public class Triangle
     {
         public Vertex V1 { get; set; }

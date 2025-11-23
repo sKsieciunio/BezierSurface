@@ -2,18 +2,12 @@ using System.Numerics;
 
 namespace BezierSurface
 {
-    /// <summary>
-    /// Represents a cubic Bézier surface patch with 16 control points
-    /// </summary>
     public class BezierSurface
     {
         private Vector3[,] controlPoints = new Vector3[4, 4];
 
         public Vector3[,] ControlPoints => controlPoints;
 
-        /// <summary>
-        /// Load control points from a text file
-        /// </summary>
         public static BezierSurface LoadFromFile(string filePath)
         {
             var surface = new BezierSurface();
@@ -43,9 +37,6 @@ namespace BezierSurface
             return surface;
         }
 
-        /// <summary>
-        /// Evaluate Bernstein polynomial
-        /// </summary>
         private static float Bernstein(int i, float t)
         {
             float[] B = new float[4];
@@ -59,9 +50,6 @@ namespace BezierSurface
             return B[i];
         }
 
-        /// <summary>
-        /// Evaluate derivative of Bernstein polynomial
-        /// </summary>
         private static float BernsteinDerivative(int i, float t)
         {
             float[] dB = new float[4];
@@ -75,9 +63,6 @@ namespace BezierSurface
             return dB[i];
         }
 
-        /// <summary>
-        /// Evaluate point on the surface at parameters (u, v)
-        /// </summary>
         public Vector3 Evaluate(float u, float v)
         {
             Vector3 point = Vector3.Zero;
@@ -93,9 +78,6 @@ namespace BezierSurface
             return point;
         }
 
-        /// <summary>
-        /// Evaluate tangent vector in u direction
-        /// </summary>
         public Vector3 EvaluateTangentU(float u, float v)
         {
             Vector3 tangent = Vector3.Zero;
@@ -111,9 +93,6 @@ namespace BezierSurface
             return tangent;
         }
 
-        /// <summary>
-        /// Evaluate tangent vector in v direction
-        /// </summary>
         public Vector3 EvaluateTangentV(float u, float v)
         {
             Vector3 tangent = Vector3.Zero;
@@ -129,9 +108,6 @@ namespace BezierSurface
             return tangent;
         }
 
-        /// <summary>
-        /// Evaluate normal vector at (u, v)
-        /// </summary>
         public Vector3 EvaluateNormal(float u, float v)
         {
             Vector3 Pu = EvaluateTangentU(u, v);

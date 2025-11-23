@@ -2,11 +2,6 @@ using System.Numerics;
 
 namespace BezierSurface
 {
-    /// <summary>
-    /// Alternative triangle filler using edge sorting (bucket sort) algorithm
-    /// This implementation is for surnames A-K (as per specification)
-    /// The main application uses TriangleFiller.cs (vertex sorting for L-Z)
-    /// </summary>
     public class TriangleFillerEdgeSort
     {
         private class Edge
@@ -14,7 +9,7 @@ namespace BezierSurface
             public float YMin { get; set; }
             public float YMax { get; set; }
             public float XAtYMin { get; set; }
-            public float DxDy { get; set; }  // Slope inverse
+            public float DxDy { get; set; }  
             public Vertex VStart { get; set; }
             public Vertex VEnd { get; set; }
         }
@@ -57,15 +52,11 @@ namespace BezierSurface
             solidColor = LightingModel.ToVector3(color);
         }
 
-        /// <summary>
-        /// Fill triangle using edge sorting (bucket sort) algorithm
-        /// </summary>
         public unsafe void FillTriangle(Triangle triangle, Bitmap buffer)
         {
             float centerX = buffer.Width / 2.0f;
             float centerY = buffer.Height / 2.0f;
 
-            // Create edges
             var edges = new List<Edge>();
             CreateEdge(triangle.V1, triangle.V2, edges);
             CreateEdge(triangle.V2, triangle.V3, edges);
@@ -73,14 +64,12 @@ namespace BezierSurface
 
             if (edges.Count == 0) return;
 
-            // Find Y range
             float yMin = edges.Min(e => e.YMin);
             float yMax = edges.Max(e => e.YMax);
 
             int scanYMin = (int)Math.Max(0, Math.Ceiling(yMin + centerY));
             int scanYMax = (int)Math.Min(buffer.Height - 1, Math.Floor(yMax + centerY));
 
-            // Create edge table (bucket sort)
             var edgeTable = new List<Edge>[buffer.Height];
             for (int i = 0; i < buffer.Height; i++)
                 edgeTable[i] = new List<Edge>();
@@ -108,16 +97,12 @@ namespace BezierSurface
                 {
                     float yf = y - centerY;
 
-                    // Add new edges from edge table
                     activeEdges.AddRange(edgeTable[y]);
-
-                    // Remove edges that are done
                     activeEdges.RemoveAll(e => yf > e.YMax);
 
                     if (activeEdges.Count < 2)
                         continue;
 
-                    // Sort active edges by X
                     activeEdges.Sort((a, b) =>
                     {
                         float xa = a.XAtYMin + (yf - a.YMin) * a.DxDy;
@@ -125,7 +110,6 @@ namespace BezierSurface
                         return xa.CompareTo(xb);
                     });
 
-                    // Fill between pairs of edges
                     for (int i = 0; i < activeEdges.Count - 1; i += 2)
                     {
                         var edge1 = activeEdges[i];
@@ -134,7 +118,6 @@ namespace BezierSurface
                         float x1 = edge1.XAtYMin + (yf - edge1.YMin) * edge1.DxDy;
                         float x2 = edge2.XAtYMin + (yf - edge2.YMin) * edge2.DxDy;
 
-                        // Interpolate vertex attributes at edges
                         float t1 = Math.Abs(edge1.YMax - edge1.YMin) > 0.001f ?
                             (yf - edge1.YMin) / (edge1.YMax - edge1.YMin) : 0;
                         float t2 = Math.Abs(edge2.YMax - edge2.YMin) > 0.001f ?
@@ -153,7 +136,6 @@ namespace BezierSurface
 
                             Vertex vPixel = InterpolateVertex(v1, v2, t);
 
-                            // Get object color
                             Vector3 objectColor;
                             if (useTexture && texture != null)
                             {
@@ -164,7 +146,6 @@ namespace BezierSurface
                                 objectColor = solidColor;
                             }
 
-                            // Calculate lighting
                             Bitmap? normalMapToUse = useNormalMap ? normalMap : null;
                             Vector3 color = lighting.CalculateColor(
                                 vPixel.NTransformed,
@@ -192,7 +173,7 @@ namespace BezierSurface
             var p2 = v2.PTransformed;
 
             if (Math.Abs(p2.Y - p1.Y) < 0.001f)
-                return; // Skip horizontal edges
+                return; 
 
             var edge = new Edge();
 

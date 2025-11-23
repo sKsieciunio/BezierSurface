@@ -10,4 +10,8 @@
 	<NoWarn>8618</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="TriangleFiller.cs" />
+  </ItemGroup>
+
 </Project>

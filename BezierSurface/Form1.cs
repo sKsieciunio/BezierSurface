@@ -14,7 +14,7 @@ namespace BezierSurface
 
         private float lightAngle = 0;
         private float lightRadius = 3.0f;
-        private Vector3 baseLightDirection; // Store the base light direction
+        private Vector3 baseLightDirection; 
 
         public Form1()
         {
@@ -24,16 +24,13 @@ namespace BezierSurface
 
         private void InitializeApp()
         {
-            // Initialize components
             mesh = new TriangleMesh();
             lighting = new LightingModel();
             filler = new TriangleFillerEdgeSort(lighting);
 
-            // Create render buffer
             renderBuffer = new Bitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = renderBuffer;
 
-            // Wire up event handlers
             trackBarDivisions.ValueChanged += OnParameterChanged;
             trackBarAlpha.ValueChanged += OnParameterChanged;
             trackBarBeta.ValueChanged += OnParameterChanged;
@@ -61,7 +58,6 @@ namespace BezierSurface
             animationTimer.Tick += OnAnimationTick;
             animationTimer.Start();
 
-            // Try to load default control points
             CreateDefaultSurface();
 
             OnParameterChanged(this, EventArgs.Empty);
@@ -69,12 +65,10 @@ namespace BezierSurface
 
         private void CreateDefaultSurface()
         {
-            // Create a dome (hemisphere) surface
             bezierSurface = new BezierSurface();
 
-            // Use a smaller spacing so the dome fits well in the view
             float spacing = 1.2f;
-            float radius = 3.0f; // radius of the hemisphere
+            float radius = 3.0f; 
             float r2 = radius * radius;
 
             for (int i = 0; i < 4; i++)
@@ -84,7 +78,6 @@ namespace BezierSurface
                     float x = (i - 1.5f) * spacing;
                     float y = (j - 1.5f) * spacing;
 
-                    // Compute dome height (hemisphere). If outside the radius, clamp to zero.
                     float d2 = x * x + y * y;
                     float z = 0;
                     if (d2 <= r2)
@@ -98,13 +91,11 @@ namespace BezierSurface
 
             GenerateMesh();
 
-            // Create default texture if none exists
             CreateDefaultTexture();
         }
 
         private void CreateDefaultTexture()
         {
-            // Create a simple checkered texture
             int size = 256;
             texture = new Bitmap(size, size);
 
@@ -112,7 +103,6 @@ namespace BezierSurface
             {
                 for (int j = 0; j < size; j++)
                 {
-                    // Checkerboard pattern
                     bool isWhite = ((i / 32) + (j / 32)) % 2 == 0;
                     Color color = isWhite ? Color.FromArgb(255, 200, 100) : Color.FromArgb(200, 100, 50);
                     texture.SetPixel(i, j, color);
@@ -121,13 +111,11 @@ namespace BezierSurface
 
             filler.SetTexture(texture);
 
-            // Create a simple normal map (flat surface pointing up)
             normalMap = new Bitmap(size, size);
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
                 {
-                    // Default normal pointing up: (0, 0, 1) -> RGB (128, 128, 255)
                     normalMap.SetPixel(i, j, Color.FromArgb(128, 128, 255));
                 }
             }
@@ -229,7 +217,6 @@ namespace BezierSurface
         {
             using (ColorDialog dialog = new ColorDialog())
             {
-                // Convert current light color to Color for the dialog
                 Vector3 currentLightColor = lighting.LightColor;
                 int r = (int)(currentLightColor.X * 255);
                 int g = (int)(currentLightColor.Y * 255);
@@ -238,14 +225,12 @@ namespace BezierSurface
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    // Convert selected color to Vector3
                     lighting.LightColor = new Vector3(
                         dialog.Color.R / 255.0f,
                         dialog.Color.G / 255.0f,
                         dialog.Color.B / 255.0f
                     );
                     
-                    // Update button color to show current light color
                     buttonChooseLightColor.BackColor = dialog.Color;
                     buttonChooseLightColor.ForeColor = GetContrastColor(dialog.Color);
                     
@@ -254,23 +239,17 @@ namespace BezierSurface
             }
         }
 
-        /// <summary>
-        /// Get contrasting text color (black or white) based on background luminance
-        /// </summary>
         private Color GetContrastColor(Color backgroundColor)
         {
-            // Calculate relative luminance
             float luminance = (0.299f * backgroundColor.R + 
                              0.587f * backgroundColor.G + 
                              0.114f * backgroundColor.B) / 255f;
             
-            // Return white for dark backgrounds, black for light backgrounds
             return luminance > 0.5f ? Color.Black : Color.White;
         }
 
         private void OnParameterChanged(object? sender, EventArgs e)
         {
-            // Update labels
             labelDivisions.Text = $"Divisions: {trackBarDivisions.Value}";
             labelAlpha.Text = $"Alpha (Z): {trackBarAlpha.Value}°";
             labelBeta.Text = $"Beta (X): {trackBarBeta.Value}°";
@@ -286,16 +265,13 @@ namespace BezierSurface
             labelKdNormalized.Visible = false;
             labelKsNormalized.Visible = false;
 
-            // Check if energy conservation is needed
             float sum = kd + ks;
             if (sum > 1.0f)
             {
-                // Energy conservation applied
                 float invSum = 1.0f / sum;
                 float kdNormalized = kd * invSum;
                 float ksNormalized = ks * invSum;
 
-                // Show warning and normalized values
                 labelEnergyConservation.Text = "⚠ Energy Conservation Applied";
                 labelEnergyConservation.Visible = true;
 
@@ -306,16 +282,13 @@ namespace BezierSurface
                 labelKsNormalized.Visible = true;
             }
 
-            // Update lighting parameters
             lighting.Kd = kd;
             lighting.Ks = ks;
             lighting.M = trackBarM.Value;
 
-            // Update filler settings
             filler.SetUseTexture(radioButtonTexture.Checked);
             filler.SetUseNormalMap(checkBoxNormalMap.Checked);
 
-            // Regenerate mesh if divisions changed
             if (sender == trackBarDivisions)
             {
                 GenerateMesh();
@@ -328,7 +301,6 @@ namespace BezierSurface
 
         private void OnAnimationChanged(object? sender, EventArgs e)
         {
-            // Animation state is checked in OnAnimationTick
         }
 
         private void OnAnimationTick(object? sender, EventArgs e)
@@ -363,20 +335,16 @@ namespace BezierSurface
         {
             if (bezierSurface == null) return;
 
-            // Clear buffer
             using (Graphics g = Graphics.FromImage(renderBuffer))
             {
                 g.Clear(Color.White);
             }
 
-            // Get rotation angles
             float alpha = trackBarAlpha.Value * (float)Math.PI / 180.0f;
             float beta = trackBarBeta.Value * (float)Math.PI / 180.0f;
 
-            // Update light position
             UpdateLightPosition();
 
-            // Transform light direction to match mesh rotation
             Matrix4x4 rotZ = Matrix4x4.CreateRotationZ(alpha);
             Matrix4x4 rotX = Matrix4x4.CreateRotationX(beta);
             Matrix4x4 rotation = rotZ * rotX;
@@ -384,14 +352,11 @@ namespace BezierSurface
             Vector3 transformedLightDirection = Vector3.TransformNormal(baseLightDirection, rotation);
             lighting.LightDirection = transformedLightDirection;
 
-            // Transform mesh
             mesh.Transform(alpha, beta);
 
-            // Apply scaling for better visualization
-            float scale = 80.0f; // Scale factor to make surface visible
+            float scale = 80.0f; 
             ScaleMesh(scale);
 
-            // Render based on checkboxes
             if (checkBoxFilled.Checked)
             {
                 RenderFilledTriangles();
@@ -407,7 +372,6 @@ namespace BezierSurface
                 RenderControlPolygon(alpha, beta, scale);
             }
 
-            // Render light source visualization
             if (checkBoxShowLight.Checked)
             {
                 RenderLightSource(alpha, beta, scale);
@@ -453,12 +417,10 @@ namespace BezierSurface
                         var p2 = triangle.V2.PTransformed;
                         var p3 = triangle.V3.PTransformed;
 
-                        // Convert to screen coordinates
                         PointF pt1 = new PointF(p1.X + centerX, p1.Y + centerY);
                         PointF pt2 = new PointF(p2.X + centerX, p2.Y + centerY);
                         PointF pt3 = new PointF(p3.X + centerX, p3.Y + centerY);
 
-                        // Draw triangle edges
                         g.DrawLine(pen, pt1, pt2);
                         g.DrawLine(pen, pt2, pt3);
                         g.DrawLine(pen, pt3, pt1);
@@ -476,12 +438,10 @@ namespace BezierSurface
                     float centerX = renderBuffer.Width / 2.0f;
                     float centerY = renderBuffer.Height / 2.0f;
 
-                    // Create rotation matrices
                     Matrix4x4 rotZ = Matrix4x4.CreateRotationZ(alpha);
                     Matrix4x4 rotX = Matrix4x4.CreateRotationX(beta);
                     Matrix4x4 rotation = rotZ * rotX;
 
-                    // Draw control point grid
                     for (int i = 0; i < 4; i++)
                     {
                         for (int j = 0; j < 3; j++)
@@ -510,7 +470,6 @@ namespace BezierSurface
                         }
                     }
 
-                    // Draw control points
                     using (Brush brush = new SolidBrush(Color.Blue))
                     {
                         for (int i = 0; i < 4; i++)
@@ -536,36 +495,29 @@ namespace BezierSurface
                 float centerX = renderBuffer.Width / 2.0f;
                 float centerY = renderBuffer.Height / 2.0f;
 
-                // Get light position in 3D space (use base light direction, not transformed)
                 Vector3 lightPos = baseLightDirection;
 
-                // Apply same rotation as the surface
                 Matrix4x4 rotZ = Matrix4x4.CreateRotationZ(alpha);
                 Matrix4x4 rotX = Matrix4x4.CreateRotationX(beta);
                 Matrix4x4 rotation = rotZ * rotX;
 
                 Vector3 lightPosRotated = Vector3.TransformNormal(lightPos, rotation);
 
-                // Scale the light position
                 Vector3 lightPosScaled = lightPosRotated * scale;
 
-                // Project to 2D screen coordinates
                 PointF lightScreen = new PointF(
                     lightPosScaled.X + centerX,
                     lightPosScaled.Y + centerY
                 );
 
-                // Convert light color to Color
                 Color lightColor = Color.FromArgb(
                     (int)(lighting.LightColor.X * 255),
                     (int)(lighting.LightColor.Y * 255),
                     (int)(lighting.LightColor.Z * 255)
                 );
 
-                // Draw light source as a sun/star icon
                 float lightSize = 20;
 
-                // Draw rays with light color
                 using (Pen rayPen = new Pen(Color.FromArgb(200, lightColor), 2))
                 {
                     int numRays = 8;
@@ -588,7 +540,6 @@ namespace BezierSurface
                     }
                 }
 
-                // Draw light glow (outer circle) with light color
                 using (Brush glowBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
                     new RectangleF(lightScreen.X - lightSize, lightScreen.Y - lightSize, lightSize * 2, lightSize * 2),
                     Color.FromArgb(100, lightColor),
@@ -602,7 +553,6 @@ namespace BezierSurface
                         lightSize * 2);
                 }
 
-                // Draw light core (inner circle) - lighter version of light color
                 Color coreColor = Color.FromArgb(
                     Math.Min(255, lightColor.R + 100),
                     Math.Min(255, lightColor.G + 100),
@@ -621,7 +571,6 @@ namespace BezierSurface
                         lightSize);
                 }
 
-                // Draw center point
                 using (Brush centerBrush = new SolidBrush(Color.White))
                 {
                     g.FillEllipse(centerBrush,
@@ -631,7 +580,6 @@ namespace BezierSurface
                         8);
                 }
 
-                // Draw light direction indicator (arrow pointing towards origin) with light color
                 Vector3 dirToOrigin = -Vector3.Normalize(lightPosRotated);
                 float arrowLength = 40;
                 PointF arrowEnd = new PointF(
@@ -645,7 +593,6 @@ namespace BezierSurface
                     g.DrawLine(arrowPen, lightScreen, arrowEnd);
                 }
 
-                // Draw label with light color
                 string lightLabel = $"Light\nZ={trackBarLightZ.Value}";
                 using (Font font = new Font("Arial", 8, FontStyle.Bold))
                 using (Brush textBrush = new SolidBrush(Color.FromArgb(220, lightColor)))
@@ -653,9 +600,7 @@ namespace BezierSurface
                 {
                     PointF textPos = new PointF(lightScreen.X + lightSize + 5, lightScreen.Y - 10);
 
-                    // Draw shadow
                     g.DrawString(lightLabel, font, shadowBrush, textPos.X + 1, textPos.Y + 1);
-                    // Draw text
                     g.DrawString(lightLabel, font, textBrush, textPos);
                 }
             }
