@@ -354,7 +354,7 @@ namespace BezierSurface
 
             mesh.Transform(alpha, beta);
 
-            float scale = 80.0f; 
+            float scale = 100.0f; 
             ScaleMesh(scale);
 
             if (checkBoxFilled.Checked)
