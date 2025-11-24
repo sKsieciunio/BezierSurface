@@ -31,6 +31,8 @@ namespace BezierSurface
             renderBuffer = new Bitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = renderBuffer;
 
+            filler.InitializeZBuffer(pictureBox.Width, pictureBox.Height);
+
             trackBarDivisions.ValueChanged += OnParameterChanged;
             trackBarAlpha.ValueChanged += OnParameterChanged;
             trackBarBeta.ValueChanged += OnParameterChanged;
@@ -339,6 +341,8 @@ namespace BezierSurface
             {
                 g.Clear(Color.White);
             }
+
+            filler.ClearZBuffer();
 
             float alpha = trackBarAlpha.Value * (float)Math.PI / 180.0f;
             float beta = trackBarBeta.Value * (float)Math.PI / 180.0f;

@@ -20,11 +20,35 @@ namespace BezierSurface
         private bool useTexture;
         private bool useNormalMap;
         private Vector3 solidColor;
+        private float[,] zBuffer;
+        private int bufferWidth;
+        private int bufferHeight;
 
         public TriangleFillerEdgeSort(LightingModel lighting)
         {
             this.lighting = lighting;
             solidColor = new Vector3(1, 0.5f, 0);
+        }
+
+        public void InitializeZBuffer(int width, int height)
+        {
+            bufferWidth = width;
+            bufferHeight = height;
+            zBuffer = new float[height, width];
+            ClearZBuffer();
+        }
+
+        public void ClearZBuffer()
+        {
+            if (zBuffer == null) return;
+            
+            for (int y = 0; y < bufferHeight; y++)
+            {
+                for (int x = 0; x < bufferWidth; x++)
+                {
+                    zBuffer[y, x] = float.MaxValue;
+                }
+            }
         }
 
         public void SetTexture(Bitmap texture)
@@ -136,6 +160,12 @@ namespace BezierSurface
 
                             Vertex vPixel = InterpolateVertex(v1, v2, t);
 
+                            float z = vPixel.PTransformed.Z;
+                            if (zBuffer != null && z >= zBuffer[y, x])
+                            {
+                                continue; 
+                            }
+
                             Vector3 objectColor;
                             if (useTexture && texture != null)
                             {
@@ -157,6 +187,11 @@ namespace BezierSurface
 
                             Color finalColor = LightingModel.ToColor(color);
                             ptr[y * stride + x] = finalColor.ToArgb();
+
+                            if (zBuffer != null)
+                            {
+                                zBuffer[y, x] = z;
+                            }
                         }
                     }
                 }
