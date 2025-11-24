@@ -46,7 +46,7 @@ namespace BezierSurface
             {
                 for (int x = 0; x < bufferWidth; x++)
                 {
-                    zBuffer[y, x] = float.MaxValue;
+                    zBuffer[y, x] = float.MinValue;
                 }
             }
         }
@@ -161,7 +161,8 @@ namespace BezierSurface
                             Vertex vPixel = InterpolateVertex(v1, v2, t);
 
                             float z = vPixel.PTransformed.Z;
-                            if (zBuffer != null && z >= zBuffer[y, x])
+                            
+                            if (zBuffer != null && z < zBuffer[y, x])
                             {
                                 continue; 
                             }
