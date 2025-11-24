@@ -43,6 +43,8 @@ namespace BezierSurface
             trackBarKs.ValueChanged += OnParameterChanged;
             trackBarM.ValueChanged += OnParameterChanged;
             trackBarLightZ.ValueChanged += OnParameterChanged;
+            trackBarSpotlightAngle.ValueChanged += OnParameterChanged;
+            trackBarSpotlightExponent.ValueChanged += OnParameterChanged;
 
             checkBoxPolygon.CheckedChanged += OnParameterChanged;
             checkBoxMesh.CheckedChanged += OnParameterChanged;
@@ -54,12 +56,25 @@ namespace BezierSurface
 
             radioButtonSolidColor.CheckedChanged += OnParameterChanged;
             radioButtonTexture.CheckedChanged += OnParameterChanged;
+            radioButtonDirectional.CheckedChanged += OnLightTypeChanged;
+            radioButtonPoint.CheckedChanged += OnLightTypeChanged;
+            radioButtonSpotlight.CheckedChanged += OnLightTypeChanged;
 
             buttonLoadControlPoints.Click += OnLoadControlPoints;
             buttonLoadTexture.Click += OnLoadTexture;
             buttonLoadNormalMap.Click += OnLoadNormalMap;
             buttonChooseColor.Click += OnChooseColor;
             buttonChooseLightColor.Click += OnChooseLightColor;
+
+            trackBarSpotlightAngle.Enabled = false;
+            trackBarSpotlightExponent.Enabled = false;
+            
+            Color defaultLightColor = Color.FromArgb(255, 230, 153); 
+            buttonChooseLightColor.BackColor = defaultLightColor;
+            buttonChooseLightColor.ForeColor = GetContrastColor(defaultLightColor);
+            
+            trackBarKd.Value = 70; 
+            trackBarKs.Value = 30; 
 
             animationTimer.Tick += OnAnimationTick;
             animationTimer.Start();
@@ -262,6 +277,8 @@ namespace BezierSurface
             labelDivisions.Text = $"Divisions: {trackBarDivisions.Value}";
             labelAlpha.Text = $"Alpha (Z): {trackBarAlpha.Value}°";
             labelBeta.Text = $"Beta (X): {trackBarBeta.Value}°";
+            labelSpotlightAngle.Text = $"Spotlight Angle: {trackBarSpotlightAngle.Value}°";
+            labelSpotlightExponent.Text = $"Spotlight Exponent (N): {trackBarSpotlightExponent.Value}";
 
             float kd = trackBarKd.Value / 100.0f;
             float ks = trackBarKs.Value / 100.0f;
@@ -294,6 +311,10 @@ namespace BezierSurface
             lighting.Kd = kd;
             lighting.Ks = ks;
             lighting.M = trackBarM.Value;
+            
+            float spotAngleRadians = trackBarSpotlightAngle.Value * (float)Math.PI / 180.0f;
+            lighting.SpotlightCutoffAngle = spotAngleRadians;
+            lighting.SpotlightExponent = trackBarSpotlightExponent.Value;
 
             filler.SetUseTexture(radioButtonTexture.Checked);
             filler.SetUseNormalMap(checkBoxNormalMap.Checked);
@@ -306,6 +327,30 @@ namespace BezierSurface
             {
                 Render();
             }
+        }
+
+        private void OnLightTypeChanged(object? sender, EventArgs e)
+        {
+            if (radioButtonDirectional.Checked)
+            {
+                lighting.CurrentLightType = LightType.Directional;
+                trackBarSpotlightAngle.Enabled = false;
+                trackBarSpotlightExponent.Enabled = false;
+            }
+            else if (radioButtonPoint.Checked)
+            {
+                lighting.CurrentLightType = LightType.Point;
+                trackBarSpotlightAngle.Enabled = false;
+                trackBarSpotlightExponent.Enabled = false;
+            }
+            else if (radioButtonSpotlight.Checked)
+            {
+                lighting.CurrentLightType = LightType.Spotlight;
+                trackBarSpotlightAngle.Enabled = true;
+                trackBarSpotlightExponent.Enabled = true;
+            }
+            
+            Render();
         }
 
         private void OnAnimationChanged(object? sender, EventArgs e)
@@ -413,7 +458,17 @@ namespace BezierSurface
             Matrix4x4 rotation = rotZ * rotX;
 
             Vector3 transformedLightDirection = Vector3.TransformNormal(baseLightDirection, rotation);
+            
             lighting.LightDirection = transformedLightDirection;
+            
+            lighting.LightPosition = baseLightDirection;
+            
+            if (lighting.CurrentLightType == LightType.Spotlight)
+            {
+                Vector3 centerOfScene = Vector3.Zero;
+                Vector3 spotDir = Vector3.Normalize(centerOfScene - baseLightDirection);
+                lighting.SpotlightDirection = spotDir;
+            }
 
             mesh.Transform(alpha, beta);
 
@@ -579,27 +634,87 @@ namespace BezierSurface
                     (int)(lighting.LightColor.Z * 255)
                 );
 
+                if (lighting.CurrentLightType == LightType.Spotlight)
+                {
+                    Vector3 centerOfScene = Vector3.Zero;
+                    Vector3 spotDir = Vector3.Normalize(centerOfScene - lightPos);
+                    Vector3 spotDirRotated = Vector3.TransformNormal(spotDir, rotation);
+                    
+                    float coneLength = 150f;
+                    PointF coneEnd = new PointF(
+                        lightScreen.X + spotDirRotated.X * coneLength,
+                        lightScreen.Y + spotDirRotated.Y * coneLength
+                    );
+                    
+                    float coneRadius = (float)Math.Tan(lighting.SpotlightCutoffAngle) * coneLength;
+                    
+                    Vector3 perpendicular1 = Vector3.Normalize(Vector3.Cross(spotDirRotated, new Vector3(0, 1, 0)));
+                    if (perpendicular1.LengthSquared() < 0.01f)
+                        perpendicular1 = Vector3.Normalize(Vector3.Cross(spotDirRotated, new Vector3(1, 0, 0)));
+                    Vector3 perpendicular2 = Vector3.Normalize(Vector3.Cross(spotDirRotated, perpendicular1));
+                    
+                    int numSegments = 12;
+                    using (Brush coneBrush = new SolidBrush(Color.FromArgb(30, lightColor)))
+                    {
+                        for (int i = 0; i < numSegments; i++)
+                        {
+                            float angle1 = (float)(i * 2 * Math.PI / numSegments);
+                            float angle2 = (float)((i + 1) * 2 * Math.PI / numSegments);
+                            
+                            PointF edge1 = new PointF(
+                                coneEnd.X + (perpendicular1.X * (float)Math.Cos(angle1) + perpendicular2.X * (float)Math.Sin(angle1)) * coneRadius,
+                                coneEnd.Y + (perpendicular1.Y * (float)Math.Cos(angle1) + perpendicular2.Y * (float)Math.Sin(angle1)) * coneRadius
+                            );
+                            
+
+                            PointF edge2 = new PointF(
+                                coneEnd.X + (perpendicular1.X * (float)Math.Cos(angle2) + perpendicular2.X * (float)Math.Sin(angle2)) * coneRadius,
+                                coneEnd.Y + (perpendicular1.Y * (float)Math.Cos(angle2) + perpendicular2.Y * (float)Math.Sin(angle2)) * coneRadius
+                            );
+                            
+                            PointF[] triangle = { lightScreen, edge1, edge2 };
+                            g.FillPolygon(coneBrush, triangle);
+                        }
+                    }
+                    
+                    using (Pen conePen = new Pen(Color.FromArgb(80, lightColor), 1))
+                    {
+                        for (int i = 0; i < numSegments; i++)
+                        {
+                            float angle = (float)(i * 2 * Math.PI / numSegments);
+                            PointF edge = new PointF(
+                                coneEnd.X + (perpendicular1.X * (float)Math.Cos(angle) + perpendicular2.X * (float)Math.Sin(angle)) * coneRadius,
+                                coneEnd.Y + (perpendicular1.Y * (float)Math.Cos(angle) + perpendicular2.Y * (float)Math.Sin(angle)) * coneRadius
+                            );
+                            g.DrawLine(conePen, lightScreen, edge);
+                        }
+                    }
+                }
+
                 float lightSize = 20;
 
-                using (Pen rayPen = new Pen(Color.FromArgb(200, lightColor), 2))
+                if (lighting.CurrentLightType == LightType.Directional)
                 {
-                    int numRays = 8;
-                    for (int i = 0; i < numRays; i++)
+                    using (Pen rayPen = new Pen(Color.FromArgb(200, lightColor), 2))
                     {
-                        float angle = (float)(i * 2 * Math.PI / numRays);
-                        float innerRadius = lightSize * 0.6f;
-                        float outerRadius = lightSize * 1.2f;
+                        int numRays = 8;
+                        for (int i = 0; i < numRays; i++)
+                        {
+                            float angle = (float)(i * 2 * Math.PI / numRays);
+                            float innerRadius = lightSize * 0.6f;
+                            float outerRadius = lightSize * 1.2f;
 
-                        PointF inner = new PointF(
-                            lightScreen.X + innerRadius * (float)Math.Cos(angle),
-                            lightScreen.Y + innerRadius * (float)Math.Sin(angle)
-                        );
-                        PointF outer = new PointF(
-                            lightScreen.X + outerRadius * (float)Math.Cos(angle),
-                            lightScreen.Y + outerRadius * (float)Math.Sin(angle)
-                        );
+                            PointF inner = new PointF(
+                                lightScreen.X + innerRadius * (float)Math.Cos(angle),
+                                lightScreen.Y + innerRadius * (float)Math.Sin(angle)
+                            );
+                            PointF outer = new PointF(
+                                lightScreen.X + outerRadius * (float)Math.Cos(angle),
+                                lightScreen.Y + outerRadius * (float)Math.Sin(angle)
+                            );
 
-                        g.DrawLine(rayPen, inner, outer);
+                            g.DrawLine(rayPen, inner, outer);
+                        }
                     }
                 }
 
@@ -643,20 +758,31 @@ namespace BezierSurface
                         8);
                 }
 
-                Vector3 dirToOrigin = -Vector3.Normalize(lightPosRotated);
-                float arrowLength = 40;
-                PointF arrowEnd = new PointF(
-                    lightScreen.X + dirToOrigin.X * arrowLength,
-                    lightScreen.Y + dirToOrigin.Y * arrowLength
-                );
-
-                using (Pen arrowPen = new Pen(Color.FromArgb(180, lightColor), 3))
+                if (lighting.CurrentLightType == LightType.Directional)
                 {
-                    arrowPen.CustomEndCap = new System.Drawing.Drawing2D.AdjustableArrowCap(5, 5);
-                    g.DrawLine(arrowPen, lightScreen, arrowEnd);
+                    Vector3 dirToOrigin = -Vector3.Normalize(lightPosRotated);
+                    float arrowLength = 40;
+                    PointF arrowEnd = new PointF(
+                        lightScreen.X + dirToOrigin.X * arrowLength,
+                        lightScreen.Y + dirToOrigin.Y * arrowLength
+                    );
+
+                    using (Pen arrowPen = new Pen(Color.FromArgb(180, lightColor), 3))
+                    {
+                        arrowPen.CustomEndCap = new System.Drawing.Drawing2D.AdjustableArrowCap(5, 5);
+                        g.DrawLine(arrowPen, lightScreen, arrowEnd);
+                    }
                 }
 
-                string lightLabel = $"Light\nZ={trackBarLightZ.Value}";
+                string lightTypeText = lighting.CurrentLightType switch
+                {
+                    LightType.Directional => "Directional",
+                    LightType.Point => "Point",
+                    LightType.Spotlight => $"Spotlight {trackBarSpotlightAngle.Value}°",
+                    _ => "Light"
+                };
+                
+                string lightLabel = $"{lightTypeText}\nZ={trackBarLightZ.Value}";
                 using (Font font = new Font("Arial", 8, FontStyle.Bold))
                 using (Brush textBrush = new SolidBrush(Color.FromArgb(220, lightColor)))
                 using (Brush shadowBrush = new SolidBrush(Color.FromArgb(100, 0, 0, 0)))

@@ -67,6 +67,13 @@
             groupBoxLighting = new GroupBox();
             groupBoxObjectColor = new GroupBox();
             groupBoxLight = new GroupBox();
+            radioButtonDirectional = new RadioButton();
+            radioButtonPoint = new RadioButton();
+            radioButtonSpotlight = new RadioButton();
+            trackBarSpotlightAngle = new TrackBar();
+            labelSpotlightAngle = new Label();
+            trackBarSpotlightExponent = new TrackBar();
+            labelSpotlightExponent = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarDivisions).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarAlpha).BeginInit();
@@ -75,6 +82,8 @@
             ((System.ComponentModel.ISupportInitialize)trackBarKs).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarM).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarLightZ).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSpotlightAngle).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSpotlightExponent).BeginInit();
             groupBoxDisplay.SuspendLayout();
             groupBoxRotation.SuspendLayout();
             groupBoxLighting.SuspendLayout();
@@ -495,6 +504,13 @@
             // 
             // groupBoxLight
             // 
+            groupBoxLight.Controls.Add(labelSpotlightExponent);
+            groupBoxLight.Controls.Add(trackBarSpotlightExponent);
+            groupBoxLight.Controls.Add(labelSpotlightAngle);
+            groupBoxLight.Controls.Add(trackBarSpotlightAngle);
+            groupBoxLight.Controls.Add(radioButtonSpotlight);
+            groupBoxLight.Controls.Add(radioButtonPoint);
+            groupBoxLight.Controls.Add(radioButtonDirectional);
             groupBoxLight.Controls.Add(labelLightZ);
             groupBoxLight.Controls.Add(trackBarLightZ);
             groupBoxLight.Controls.Add(checkBoxAnimateLight);
@@ -504,10 +520,80 @@
             groupBoxLight.Margin = new Padding(3, 4, 3, 4);
             groupBoxLight.Name = "groupBoxLight";
             groupBoxLight.Padding = new Padding(3, 4, 3, 4);
-            groupBoxLight.Size = new Size(251, 240);
+            groupBoxLight.Size = new Size(251, 480);
             groupBoxLight.TabIndex = 25;
             groupBoxLight.TabStop = false;
             groupBoxLight.Text = "Light Source";
+            // 
+            // radioButtonDirectional
+            // 
+            radioButtonDirectional.AutoSize = true;
+            radioButtonDirectional.Checked = true;
+            radioButtonDirectional.Location = new Point(7, 235);
+            radioButtonDirectional.Name = "radioButtonDirectional";
+            radioButtonDirectional.Size = new Size(103, 24);
+            radioButtonDirectional.TabIndex = 4;
+            radioButtonDirectional.TabStop = true;
+            radioButtonDirectional.Text = "Directional";
+            radioButtonDirectional.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonPoint
+            // 
+            radioButtonPoint.AutoSize = true;
+            radioButtonPoint.Location = new Point(7, 265);
+            radioButtonPoint.Name = "radioButtonPoint";
+            radioButtonPoint.Size = new Size(63, 24);
+            radioButtonPoint.TabIndex = 5;
+            radioButtonPoint.Text = "Point";
+            radioButtonPoint.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonSpotlight
+            // 
+            radioButtonSpotlight.AutoSize = true;
+            radioButtonSpotlight.Location = new Point(7, 295);
+            radioButtonSpotlight.Name = "radioButtonSpotlight";
+            radioButtonSpotlight.Size = new Size(90, 24);
+            radioButtonSpotlight.TabIndex = 6;
+            radioButtonSpotlight.Text = "Spotlight";
+            radioButtonSpotlight.UseVisualStyleBackColor = true;
+            // 
+            // trackBarSpotlightAngle
+            // 
+            trackBarSpotlightAngle.Location = new Point(7, 350);
+            trackBarSpotlightAngle.Maximum = 90;
+            trackBarSpotlightAngle.Minimum = 5;
+            trackBarSpotlightAngle.Name = "trackBarSpotlightAngle";
+            trackBarSpotlightAngle.Size = new Size(229, 56);
+            trackBarSpotlightAngle.TabIndex = 7;
+            trackBarSpotlightAngle.Value = 30;
+            // 
+            // labelSpotlightAngle
+            // 
+            labelSpotlightAngle.AutoSize = true;
+            labelSpotlightAngle.Location = new Point(7, 330);
+            labelSpotlightAngle.Name = "labelSpotlightAngle";
+            labelSpotlightAngle.Size = new Size(138, 20);
+            labelSpotlightAngle.TabIndex = 8;
+            labelSpotlightAngle.Text = "Spotlight Angle: 30°";
+            // 
+            // trackBarSpotlightExponent
+            // 
+            trackBarSpotlightExponent.Location = new Point(7, 430);
+            trackBarSpotlightExponent.Maximum = 100;
+            trackBarSpotlightExponent.Minimum = 1;
+            trackBarSpotlightExponent.Name = "trackBarSpotlightExponent";
+            trackBarSpotlightExponent.Size = new Size(229, 56);
+            trackBarSpotlightExponent.TabIndex = 9;
+            trackBarSpotlightExponent.Value = 10;
+            // 
+            // labelSpotlightExponent
+            // 
+            labelSpotlightExponent.AutoSize = true;
+            labelSpotlightExponent.Location = new Point(7, 410);
+            labelSpotlightExponent.Name = "labelSpotlightExponent";
+            labelSpotlightExponent.Size = new Size(179, 20);
+            labelSpotlightExponent.TabIndex = 10;
+            labelSpotlightExponent.Text = "Spotlight Exponent (N): 10";
             // 
             // Form1
             // 
@@ -532,6 +618,8 @@
             ((System.ComponentModel.ISupportInitialize)trackBarKs).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarM).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarLightZ).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSpotlightAngle).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarSpotlightExponent).EndInit();
             groupBoxDisplay.ResumeLayout(false);
             groupBoxDisplay.PerformLayout();
             groupBoxRotation.ResumeLayout(false);
@@ -585,5 +673,12 @@
         private GroupBox groupBoxLighting;
         private GroupBox groupBoxObjectColor;
         private GroupBox groupBoxLight;
+        private RadioButton radioButtonDirectional;
+        private RadioButton radioButtonPoint;
+        private RadioButton radioButtonSpotlight;
+        private TrackBar trackBarSpotlightAngle;
+        private Label labelSpotlightAngle;
+        private TrackBar trackBarSpotlightExponent;
+        private Label labelSpotlightExponent;
     }
 }

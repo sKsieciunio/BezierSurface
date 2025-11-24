@@ -2,14 +2,34 @@ using System.Numerics;
 
 namespace BezierSurface
 {
+    public enum LightType
+    {
+        Directional,
+        Point,
+        Spotlight
+    }
+
     public class LightingModel
     {
         public float Kd { get; set; } = 0.5f;  
         public float Ks { get; set; } = 0.5f;  
-        public int M { get; set; } = 50;       
+        public int M { get; set; } = 50;      
 
-        public Vector3 LightColor { get; set; } = Vector3.One; 
+        public Vector3 LightColor { get; set; } = new Vector3(1.0f, 0.9f, 0.6f); 
+        
         public Vector3 LightDirection { get; set; } = new Vector3(0, 0, 1);
+        
+        public Vector3 LightPosition { get; set; } = new Vector3(0, 0, 5);
+        
+        public LightType CurrentLightType { get; set; } = LightType.Directional;
+        
+        public float AttenuationConstant { get; set; } = 1.0f;
+        public float AttenuationLinear { get; set; } = 0.02f;      
+        public float AttenuationQuadratic { get; set; } = 0.001f;   
+        
+        public float SpotlightCutoffAngle { get; set; } = (float)(Math.PI / 6); 
+        public int SpotlightExponent { get; set; } = 10; 
+        public Vector3 SpotlightDirection { get; set; } = new Vector3(0, 0, -1);
 
         public Vector3 CalculateColor(Vector3 normal, Vector3 objectColor, Bitmap? normalMap = null, 
             Vertex? vertex = null, Vector3? tangentPu = null, Vector3? tangentPv = null)
@@ -24,7 +44,50 @@ namespace BezierSurface
             if (N.LengthSquared() > 0)
                 N = Vector3.Normalize(N);
 
-            Vector3 L = Vector3.Normalize(LightDirection);
+            Vector3 L;
+            float intensity = 1.0f;
+            
+            if (CurrentLightType == LightType.Directional)
+            {
+                L = Vector3.Normalize(LightDirection);
+            }
+            else
+            {
+                if (vertex == null)
+                {
+                    L = Vector3.Normalize(LightDirection);
+                }
+                else
+                {
+                    Vector3 lightVector = LightPosition - vertex.PTransformed;
+                    float distance = lightVector.Length();
+                    L = lightVector / distance; 
+                    
+                    float attenuation = 1.0f / (AttenuationConstant + 
+                                               AttenuationLinear * distance + 
+                                               AttenuationQuadratic * distance * distance);
+                    intensity *= attenuation;
+                    
+                    if (CurrentLightType == LightType.Spotlight)
+                    {
+                        Vector3 spotDir = Vector3.Normalize(SpotlightDirection);
+                        float cosAlpha = Vector3.Dot(-L, spotDir);
+                        
+                        float cosCutoff = (float)Math.Cos(SpotlightCutoffAngle);
+                        
+                        if (cosAlpha < cosCutoff)
+                        {
+                            intensity = 0.0f;
+                        }
+                        else
+                        {
+                            float spotIntensity = (float)Math.Pow(cosAlpha, SpotlightExponent);
+                            intensity *= spotIntensity;
+                        }
+                    }
+                }
+            }
+
             Vector3 V = new Vector3(0, 0, 1);
 
             float NdotL = Vector3.Dot(N, L);
@@ -51,7 +114,7 @@ namespace BezierSurface
             float specular = (float)Math.Pow(Math.Max(0, VdotR), M);
             Vector3 specularColor = ks * colorMixed * specular;
 
-            Vector3 finalColor = diffuseColor + specularColor;
+            Vector3 finalColor = (diffuseColor + specularColor) * intensity;
 
             finalColor = Vector3.Clamp(finalColor, Vector3.Zero, Vector3.One);
 

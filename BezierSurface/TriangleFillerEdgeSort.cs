@@ -27,7 +27,7 @@ namespace BezierSurface
         public TriangleFillerEdgeSort(LightingModel lighting)
         {
             this.lighting = lighting;
-            solidColor = new Vector3(1, 0.5f, 0);
+            solidColor = new Vector3(0.9f, 0.9f, 0.9f); 
         }
 
         public void InitializeZBuffer(int width, int height)
@@ -178,11 +178,23 @@ namespace BezierSurface
                             }
 
                             Bitmap? normalMapToUse = useNormalMap ? normalMap : null;
+                            
+                            Vertex vForLighting = new Vertex()
+                            {
+                                U = vPixel.U,
+                                V = vPixel.V,
+                                P = vPixel.P,
+                                PTransformed = vPixel.P, 
+                                NTransformed = vPixel.NTransformed,
+                                PuTransformed = vPixel.PuTransformed,
+                                PvTransformed = vPixel.PvTransformed
+                            };
+                            
                             Vector3 color = lighting.CalculateColor(
                                 vPixel.NTransformed,
                                 objectColor,
                                 normalMapToUse,
-                                vPixel,
+                                vForLighting,
                                 vPixel.PuTransformed,
                                 vPixel.PvTransformed);
 
