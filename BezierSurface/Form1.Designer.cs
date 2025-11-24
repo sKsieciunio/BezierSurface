@@ -41,6 +41,7 @@
             checkBoxMesh = new CheckBox();
             checkBoxFilled = new CheckBox();
             checkBoxAnimateLight = new CheckBox();
+            checkBoxAnimateSurface = new CheckBox();
             checkBoxShowLight = new CheckBox();
             radioButtonSolidColor = new RadioButton();
             radioButtonTexture = new RadioButton();
@@ -85,85 +86,94 @@
             // 
             pictureBox.BackColor = Color.White;
             pictureBox.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox.Location = new Point(12, 12);
+            pictureBox.Location = new Point(14, 16);
+            pictureBox.Margin = new Padding(3, 4, 3, 4);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(600, 600);
+            pictureBox.Size = new Size(685, 799);
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             // 
             // trackBarDivisions
             // 
-            trackBarDivisions.Location = new Point(6, 38);
+            trackBarDivisions.Location = new Point(7, 51);
+            trackBarDivisions.Margin = new Padding(3, 4, 3, 4);
             trackBarDivisions.Maximum = 50;
             trackBarDivisions.Minimum = 1;
             trackBarDivisions.Name = "trackBarDivisions";
-            trackBarDivisions.Size = new Size(200, 45);
+            trackBarDivisions.Size = new Size(229, 56);
             trackBarDivisions.TabIndex = 0;
             trackBarDivisions.Value = 10;
             // 
             // trackBarAlpha
             // 
-            trackBarAlpha.Location = new Point(6, 35);
+            trackBarAlpha.Location = new Point(7, 47);
+            trackBarAlpha.Margin = new Padding(3, 4, 3, 4);
             trackBarAlpha.Maximum = 90;
             trackBarAlpha.Minimum = -90;
             trackBarAlpha.Name = "trackBarAlpha";
-            trackBarAlpha.Size = new Size(200, 45);
+            trackBarAlpha.Size = new Size(229, 56);
             trackBarAlpha.TabIndex = 0;
             // 
             // trackBarBeta
             // 
-            trackBarBeta.Location = new Point(6, 95);
+            trackBarBeta.Location = new Point(7, 127);
+            trackBarBeta.Margin = new Padding(3, 4, 3, 4);
             trackBarBeta.Maximum = 90;
             trackBarBeta.Minimum = -90;
             trackBarBeta.Name = "trackBarBeta";
-            trackBarBeta.Size = new Size(200, 45);
+            trackBarBeta.Size = new Size(229, 56);
             trackBarBeta.TabIndex = 1;
             // 
             // trackBarKd
             // 
-            trackBarKd.Location = new Point(6, 35);
+            trackBarKd.Location = new Point(7, 47);
+            trackBarKd.Margin = new Padding(3, 4, 3, 4);
             trackBarKd.Maximum = 100;
             trackBarKd.Name = "trackBarKd";
-            trackBarKd.Size = new Size(200, 45);
+            trackBarKd.Size = new Size(229, 56);
             trackBarKd.TabIndex = 0;
             trackBarKd.Value = 50;
             trackBarKd.Scroll += trackBarKd_Scroll;
             // 
             // trackBarKs
             // 
-            trackBarKs.Location = new Point(6, 95);
+            trackBarKs.Location = new Point(7, 127);
+            trackBarKs.Margin = new Padding(3, 4, 3, 4);
             trackBarKs.Maximum = 100;
             trackBarKs.Name = "trackBarKs";
-            trackBarKs.Size = new Size(200, 45);
+            trackBarKs.Size = new Size(229, 56);
             trackBarKs.TabIndex = 1;
             trackBarKs.Value = 50;
             // 
             // trackBarM
             // 
-            trackBarM.Location = new Point(6, 155);
+            trackBarM.Location = new Point(7, 207);
+            trackBarM.Margin = new Padding(3, 4, 3, 4);
             trackBarM.Maximum = 100;
             trackBarM.Minimum = 1;
             trackBarM.Name = "trackBarM";
-            trackBarM.Size = new Size(200, 45);
+            trackBarM.Size = new Size(229, 56);
             trackBarM.TabIndex = 2;
             trackBarM.Value = 50;
             // 
             // trackBarLightZ
             // 
-            trackBarLightZ.Location = new Point(6, 35);
+            trackBarLightZ.Location = new Point(7, 47);
+            trackBarLightZ.Margin = new Padding(3, 4, 3, 4);
             trackBarLightZ.Maximum = 100;
             trackBarLightZ.Minimum = -100;
             trackBarLightZ.Name = "trackBarLightZ";
-            trackBarLightZ.Size = new Size(200, 45);
+            trackBarLightZ.Size = new Size(229, 56);
             trackBarLightZ.TabIndex = 0;
             trackBarLightZ.Value = 20;
             // 
             // checkBoxPolygon
             // 
             checkBoxPolygon.AutoSize = true;
-            checkBoxPolygon.Location = new Point(6, 89);
+            checkBoxPolygon.Location = new Point(7, 105);
+            checkBoxPolygon.Margin = new Padding(3, 4, 3, 4);
             checkBoxPolygon.Name = "checkBoxPolygon";
-            checkBoxPolygon.Size = new Size(104, 19);
+            checkBoxPolygon.Size = new Size(129, 24);
             checkBoxPolygon.TabIndex = 0;
             checkBoxPolygon.Text = "Bézier Polygon";
             checkBoxPolygon.UseVisualStyleBackColor = true;
@@ -173,9 +183,10 @@
             checkBoxMesh.AutoSize = true;
             checkBoxMesh.Checked = true;
             checkBoxMesh.CheckState = CheckState.Checked;
-            checkBoxMesh.Location = new Point(6, 114);
+            checkBoxMesh.Location = new Point(7, 133);
+            checkBoxMesh.Margin = new Padding(3, 4, 3, 4);
             checkBoxMesh.Name = "checkBoxMesh";
-            checkBoxMesh.Size = new Size(100, 19);
+            checkBoxMesh.Size = new Size(123, 24);
             checkBoxMesh.TabIndex = 1;
             checkBoxMesh.Text = "Triangle Mesh";
             checkBoxMesh.UseVisualStyleBackColor = true;
@@ -185,9 +196,10 @@
             checkBoxFilled.AutoSize = true;
             checkBoxFilled.Checked = true;
             checkBoxFilled.CheckState = CheckState.Checked;
-            checkBoxFilled.Location = new Point(6, 140);
+            checkBoxFilled.Location = new Point(7, 165);
+            checkBoxFilled.Margin = new Padding(3, 4, 3, 4);
             checkBoxFilled.Name = "checkBoxFilled";
-            checkBoxFilled.Size = new Size(104, 19);
+            checkBoxFilled.Size = new Size(130, 24);
             checkBoxFilled.TabIndex = 2;
             checkBoxFilled.Text = "Filled Triangles";
             checkBoxFilled.UseVisualStyleBackColor = true;
@@ -197,21 +209,34 @@
             checkBoxAnimateLight.AutoSize = true;
             checkBoxAnimateLight.Checked = true;
             checkBoxAnimateLight.CheckState = CheckState.Checked;
-            checkBoxAnimateLight.Location = new Point(6, 95);
+            checkBoxAnimateLight.Location = new Point(7, 127);
+            checkBoxAnimateLight.Margin = new Padding(3, 4, 3, 4);
             checkBoxAnimateLight.Name = "checkBoxAnimateLight";
-            checkBoxAnimateLight.Size = new Size(101, 19);
+            checkBoxAnimateLight.Size = new Size(124, 24);
             checkBoxAnimateLight.TabIndex = 1;
             checkBoxAnimateLight.Text = "Animate Light";
             checkBoxAnimateLight.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAnimateSurface
+            // 
+            checkBoxAnimateSurface.AutoSize = true;
+            checkBoxAnimateSurface.Location = new Point(7, 197);
+            checkBoxAnimateSurface.Margin = new Padding(3, 4, 3, 4);
+            checkBoxAnimateSurface.Name = "checkBoxAnimateSurface";
+            checkBoxAnimateSurface.Size = new Size(140, 24);
+            checkBoxAnimateSurface.TabIndex = 3;
+            checkBoxAnimateSurface.Text = "Animate Surface";
+            checkBoxAnimateSurface.UseVisualStyleBackColor = true;
             // 
             // checkBoxShowLight
             // 
             checkBoxShowLight.AutoSize = true;
             checkBoxShowLight.Checked = true;
             checkBoxShowLight.CheckState = CheckState.Checked;
-            checkBoxShowLight.Location = new Point(6, 120);
+            checkBoxShowLight.Location = new Point(7, 160);
+            checkBoxShowLight.Margin = new Padding(3, 4, 3, 4);
             checkBoxShowLight.Name = "checkBoxShowLight";
-            checkBoxShowLight.Size = new Size(85, 19);
+            checkBoxShowLight.Size = new Size(104, 24);
             checkBoxShowLight.TabIndex = 2;
             checkBoxShowLight.Text = "Show Light";
             checkBoxShowLight.UseVisualStyleBackColor = true;
@@ -220,9 +245,10 @@
             // 
             radioButtonSolidColor.AutoSize = true;
             radioButtonSolidColor.Checked = true;
-            radioButtonSolidColor.Location = new Point(6, 22);
+            radioButtonSolidColor.Location = new Point(7, 29);
+            radioButtonSolidColor.Margin = new Padding(3, 4, 3, 4);
             radioButtonSolidColor.Name = "radioButtonSolidColor";
-            radioButtonSolidColor.Size = new Size(83, 19);
+            radioButtonSolidColor.Size = new Size(104, 24);
             radioButtonSolidColor.TabIndex = 0;
             radioButtonSolidColor.TabStop = true;
             radioButtonSolidColor.Text = "Solid Color";
@@ -231,9 +257,10 @@
             // radioButtonTexture
             // 
             radioButtonTexture.AutoSize = true;
-            radioButtonTexture.Location = new Point(6, 47);
+            radioButtonTexture.Location = new Point(7, 63);
+            radioButtonTexture.Margin = new Padding(3, 4, 3, 4);
             radioButtonTexture.Name = "radioButtonTexture";
-            radioButtonTexture.Size = new Size(63, 19);
+            radioButtonTexture.Size = new Size(78, 24);
             radioButtonTexture.TabIndex = 1;
             radioButtonTexture.Text = "Texture";
             radioButtonTexture.UseVisualStyleBackColor = true;
@@ -241,54 +268,60 @@
             // checkBoxNormalMap
             // 
             checkBoxNormalMap.AutoSize = true;
-            checkBoxNormalMap.Location = new Point(6, 72);
+            checkBoxNormalMap.Location = new Point(7, 96);
+            checkBoxNormalMap.Margin = new Padding(3, 4, 3, 4);
             checkBoxNormalMap.Name = "checkBoxNormalMap";
-            checkBoxNormalMap.Size = new Size(93, 19);
+            checkBoxNormalMap.Size = new Size(115, 24);
             checkBoxNormalMap.TabIndex = 2;
             checkBoxNormalMap.Text = "Normal Map";
             checkBoxNormalMap.UseVisualStyleBackColor = true;
             // 
             // buttonLoadTexture
             // 
-            buttonLoadTexture.Location = new Point(6, 97);
+            buttonLoadTexture.Location = new Point(7, 129);
+            buttonLoadTexture.Margin = new Padding(3, 4, 3, 4);
             buttonLoadTexture.Name = "buttonLoadTexture";
-            buttonLoadTexture.Size = new Size(100, 23);
+            buttonLoadTexture.Size = new Size(114, 31);
             buttonLoadTexture.TabIndex = 3;
             buttonLoadTexture.Text = "Load Texture";
             buttonLoadTexture.UseVisualStyleBackColor = true;
             // 
             // buttonLoadNormalMap
             // 
-            buttonLoadNormalMap.Location = new Point(112, 97);
+            buttonLoadNormalMap.Location = new Point(128, 129);
+            buttonLoadNormalMap.Margin = new Padding(3, 4, 3, 4);
             buttonLoadNormalMap.Name = "buttonLoadNormalMap";
-            buttonLoadNormalMap.Size = new Size(94, 23);
+            buttonLoadNormalMap.Size = new Size(107, 31);
             buttonLoadNormalMap.TabIndex = 4;
             buttonLoadNormalMap.Text = "Load Normal";
             buttonLoadNormalMap.UseVisualStyleBackColor = true;
             // 
             // buttonChooseColor
             // 
-            buttonChooseColor.Location = new Point(99, 20);
+            buttonChooseColor.Location = new Point(113, 27);
+            buttonChooseColor.Margin = new Padding(3, 4, 3, 4);
             buttonChooseColor.Name = "buttonChooseColor";
-            buttonChooseColor.Size = new Size(107, 23);
+            buttonChooseColor.Size = new Size(122, 31);
             buttonChooseColor.TabIndex = 5;
             buttonChooseColor.Text = "Choose Color";
             buttonChooseColor.UseVisualStyleBackColor = true;
             // 
             // buttonLoadControlPoints
             // 
-            buttonLoadControlPoints.Location = new Point(630, 12);
+            buttonLoadControlPoints.Location = new Point(720, 16);
+            buttonLoadControlPoints.Margin = new Padding(3, 4, 3, 4);
             buttonLoadControlPoints.Name = "buttonLoadControlPoints";
-            buttonLoadControlPoints.Size = new Size(140, 30);
+            buttonLoadControlPoints.Size = new Size(160, 40);
             buttonLoadControlPoints.TabIndex = 20;
             buttonLoadControlPoints.Text = "Load Control Points";
             buttonLoadControlPoints.UseVisualStyleBackColor = true;
             // 
             // buttonChooseLightColor
             // 
-            buttonChooseLightColor.Location = new Point(6, 145);
+            buttonChooseLightColor.Location = new Point(7, 193);
+            buttonChooseLightColor.Margin = new Padding(3, 4, 3, 4);
             buttonChooseLightColor.Name = "buttonChooseLightColor";
-            buttonChooseLightColor.Size = new Size(120, 23);
+            buttonChooseLightColor.Size = new Size(137, 31);
             buttonChooseLightColor.TabIndex = 3;
             buttonChooseLightColor.Text = "Light Color";
             buttonChooseLightColor.UseVisualStyleBackColor = true;
@@ -296,63 +329,63 @@
             // labelDivisions
             // 
             labelDivisions.AutoSize = true;
-            labelDivisions.Location = new Point(6, 20);
+            labelDivisions.Location = new Point(7, 27);
             labelDivisions.Name = "labelDivisions";
-            labelDivisions.Size = new Size(72, 15);
+            labelDivisions.Size = new Size(91, 20);
             labelDivisions.TabIndex = 1;
             labelDivisions.Text = "Divisions: 10";
             // 
             // labelAlpha
             // 
             labelAlpha.AutoSize = true;
-            labelAlpha.Location = new Point(6, 20);
+            labelAlpha.Location = new Point(7, 27);
             labelAlpha.Name = "labelAlpha";
-            labelAlpha.Size = new Size(73, 15);
+            labelAlpha.Size = new Size(92, 20);
             labelAlpha.TabIndex = 2;
             labelAlpha.Text = "Alpha (Z): 0°";
             // 
             // labelBeta
             // 
             labelBeta.AutoSize = true;
-            labelBeta.Location = new Point(6, 80);
+            labelBeta.Location = new Point(7, 107);
             labelBeta.Name = "labelBeta";
-            labelBeta.Size = new Size(65, 15);
+            labelBeta.Size = new Size(83, 20);
             labelBeta.TabIndex = 3;
             labelBeta.Text = "Beta (X): 0°";
             // 
             // labelKd
             // 
             labelKd.AutoSize = true;
-            labelKd.Location = new Point(6, 20);
+            labelKd.Location = new Point(7, 27);
             labelKd.Name = "labelKd";
-            labelKd.Size = new Size(48, 15);
+            labelKd.Size = new Size(61, 20);
             labelKd.TabIndex = 3;
             labelKd.Text = "Kd: 0.50";
             // 
             // labelKs
             // 
             labelKs.AutoSize = true;
-            labelKs.Location = new Point(6, 80);
+            labelKs.Location = new Point(7, 107);
             labelKs.Name = "labelKs";
-            labelKs.Size = new Size(46, 15);
+            labelKs.Size = new Size(58, 20);
             labelKs.TabIndex = 4;
             labelKs.Text = "Ks: 0.50";
             // 
             // labelM
             // 
             labelM.AutoSize = true;
-            labelM.Location = new Point(6, 140);
+            labelM.Location = new Point(7, 187);
             labelM.Name = "labelM";
-            labelM.Size = new Size(36, 15);
+            labelM.Size = new Size(45, 20);
             labelM.TabIndex = 5;
             labelM.Text = "M: 50";
             // 
             // labelLightZ
             // 
             labelLightZ.AutoSize = true;
-            labelLightZ.Location = new Point(6, 20);
+            labelLightZ.Location = new Point(7, 27);
             labelLightZ.Name = "labelLightZ";
-            labelLightZ.Size = new Size(62, 15);
+            labelLightZ.Size = new Size(78, 20);
             labelLightZ.TabIndex = 1;
             labelLightZ.Text = "Light Z: 20";
             // 
@@ -361,9 +394,9 @@
             labelEnergyConservation.AutoSize = true;
             labelEnergyConservation.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             labelEnergyConservation.ForeColor = Color.DarkOrange;
-            labelEnergyConservation.Location = new Point(17, 203);
+            labelEnergyConservation.Location = new Point(19, 271);
             labelEnergyConservation.Name = "labelEnergyConservation";
-            labelEnergyConservation.Size = new Size(0, 15);
+            labelEnergyConservation.Size = new Size(0, 20);
             labelEnergyConservation.TabIndex = 6;
             labelEnergyConservation.Visible = false;
             // 
@@ -371,9 +404,9 @@
             // 
             labelKdNormalized.AutoSize = true;
             labelKdNormalized.ForeColor = Color.Gray;
-            labelKdNormalized.Location = new Point(110, 20);
+            labelKdNormalized.Location = new Point(126, 27);
             labelKdNormalized.Name = "labelKdNormalized";
-            labelKdNormalized.Size = new Size(0, 15);
+            labelKdNormalized.Size = new Size(0, 20);
             labelKdNormalized.TabIndex = 7;
             labelKdNormalized.Visible = false;
             // 
@@ -381,9 +414,9 @@
             // 
             labelKsNormalized.AutoSize = true;
             labelKsNormalized.ForeColor = Color.Gray;
-            labelKsNormalized.Location = new Point(110, 80);
+            labelKsNormalized.Location = new Point(126, 107);
             labelKsNormalized.Name = "labelKsNormalized";
-            labelKsNormalized.Size = new Size(0, 15);
+            labelKsNormalized.Size = new Size(0, 20);
             labelKsNormalized.TabIndex = 8;
             labelKsNormalized.Visible = false;
             // 
@@ -398,9 +431,12 @@
             groupBoxDisplay.Controls.Add(checkBoxPolygon);
             groupBoxDisplay.Controls.Add(checkBoxMesh);
             groupBoxDisplay.Controls.Add(checkBoxFilled);
-            groupBoxDisplay.Location = new Point(630, 50);
+            groupBoxDisplay.Controls.Add(checkBoxAnimateSurface);
+            groupBoxDisplay.Location = new Point(720, 67);
+            groupBoxDisplay.Margin = new Padding(3, 4, 3, 4);
             groupBoxDisplay.Name = "groupBoxDisplay";
-            groupBoxDisplay.Size = new Size(220, 166);
+            groupBoxDisplay.Padding = new Padding(3, 4, 3, 4);
+            groupBoxDisplay.Size = new Size(251, 260);
             groupBoxDisplay.TabIndex = 21;
             groupBoxDisplay.TabStop = false;
             groupBoxDisplay.Text = "Display";
@@ -411,9 +447,11 @@
             groupBoxRotation.Controls.Add(trackBarAlpha);
             groupBoxRotation.Controls.Add(labelBeta);
             groupBoxRotation.Controls.Add(trackBarBeta);
-            groupBoxRotation.Location = new Point(630, 225);
+            groupBoxRotation.Location = new Point(720, 300);
+            groupBoxRotation.Margin = new Padding(3, 4, 3, 4);
             groupBoxRotation.Name = "groupBoxRotation";
-            groupBoxRotation.Size = new Size(220, 150);
+            groupBoxRotation.Padding = new Padding(3, 4, 3, 4);
+            groupBoxRotation.Size = new Size(251, 200);
             groupBoxRotation.TabIndex = 22;
             groupBoxRotation.TabStop = false;
             groupBoxRotation.Text = "Rotation";
@@ -429,9 +467,11 @@
             groupBoxLighting.Controls.Add(labelEnergyConservation);
             groupBoxLighting.Controls.Add(labelM);
             groupBoxLighting.Controls.Add(trackBarM);
-            groupBoxLighting.Location = new Point(630, 381);
+            groupBoxLighting.Location = new Point(720, 508);
+            groupBoxLighting.Margin = new Padding(3, 4, 3, 4);
             groupBoxLighting.Name = "groupBoxLighting";
-            groupBoxLighting.Size = new Size(220, 235);
+            groupBoxLighting.Padding = new Padding(3, 4, 3, 4);
+            groupBoxLighting.Size = new Size(251, 313);
             groupBoxLighting.TabIndex = 23;
             groupBoxLighting.TabStop = false;
             groupBoxLighting.Text = "Lighting Parameters";
@@ -444,9 +484,11 @@
             groupBoxObjectColor.Controls.Add(checkBoxNormalMap);
             groupBoxObjectColor.Controls.Add(buttonLoadTexture);
             groupBoxObjectColor.Controls.Add(buttonLoadNormalMap);
-            groupBoxObjectColor.Location = new Point(860, 50);
+            groupBoxObjectColor.Location = new Point(983, 67);
+            groupBoxObjectColor.Margin = new Padding(3, 4, 3, 4);
             groupBoxObjectColor.Name = "groupBoxObjectColor";
-            groupBoxObjectColor.Size = new Size(220, 130);
+            groupBoxObjectColor.Padding = new Padding(3, 4, 3, 4);
+            groupBoxObjectColor.Size = new Size(251, 173);
             groupBoxObjectColor.TabIndex = 24;
             groupBoxObjectColor.TabStop = false;
             groupBoxObjectColor.Text = "Object Color";
@@ -458,18 +500,20 @@
             groupBoxLight.Controls.Add(checkBoxAnimateLight);
             groupBoxLight.Controls.Add(checkBoxShowLight);
             groupBoxLight.Controls.Add(buttonChooseLightColor);
-            groupBoxLight.Location = new Point(860, 190);
+            groupBoxLight.Location = new Point(983, 253);
+            groupBoxLight.Margin = new Padding(3, 4, 3, 4);
             groupBoxLight.Name = "groupBoxLight";
-            groupBoxLight.Size = new Size(220, 180);
+            groupBoxLight.Padding = new Padding(3, 4, 3, 4);
+            groupBoxLight.Size = new Size(251, 240);
             groupBoxLight.TabIndex = 25;
             groupBoxLight.TabStop = false;
             groupBoxLight.Text = "Light Source";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1100, 625);
+            ClientSize = new Size(1257, 833);
             Controls.Add(groupBoxLight);
             Controls.Add(groupBoxObjectColor);
             Controls.Add(groupBoxLighting);
@@ -477,6 +521,7 @@
             Controls.Add(groupBoxDisplay);
             Controls.Add(buttonLoadControlPoints);
             Controls.Add(pictureBox);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = "Bézier Surface Renderer";
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
@@ -514,6 +559,7 @@
         private CheckBox checkBoxMesh;
         private CheckBox checkBoxFilled;
         private CheckBox checkBoxAnimateLight;
+        private CheckBox checkBoxAnimateSurface;
         private CheckBox checkBoxShowLight;
         private RadioButton radioButtonSolidColor;
         private RadioButton radioButtonTexture;

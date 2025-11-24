@@ -14,7 +14,10 @@ namespace BezierSurface
 
         private float lightAngle = 0;
         private float lightRadius = 3.0f;
-        private Vector3 baseLightDirection; 
+        private Vector3 baseLightDirection;
+
+        private float surfaceAnimationTime = 0;
+        private Vector3[,] originalControlPoints = new Vector3[4, 4];
 
         public Form1()
         {
@@ -45,6 +48,7 @@ namespace BezierSurface
             checkBoxMesh.CheckedChanged += OnParameterChanged;
             checkBoxFilled.CheckedChanged += OnParameterChanged;
             checkBoxAnimateLight.CheckedChanged += OnAnimationChanged;
+            checkBoxAnimateSurface.CheckedChanged += OnAnimationChanged;
             checkBoxNormalMap.CheckedChanged += OnParameterChanged;
             checkBoxShowLight.CheckedChanged += OnParameterChanged;
 
@@ -90,6 +94,8 @@ namespace BezierSurface
                     bezierSurface.ControlPoints[i, j] = new Vector3(x, y, z);
                 }
             }
+
+            StoreOriginalControlPoints();
 
             GenerateMesh();
 
@@ -144,6 +150,7 @@ namespace BezierSurface
             try
             {
                 bezierSurface = BezierSurface.LoadFromFile(filePath);
+                StoreOriginalControlPoints();
                 GenerateMesh();
                 MessageBox.Show("Control points loaded successfully!", "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -307,10 +314,24 @@ namespace BezierSurface
 
         private void OnAnimationTick(object? sender, EventArgs e)
         {
+            bool needsRender = false;
+
             if (checkBoxAnimateLight.Checked)
             {
                 lightAngle += 0.05f;
                 UpdateLightPosition();
+                needsRender = true;
+            }
+
+            if (checkBoxAnimateSurface.Checked)
+            {
+                surfaceAnimationTime += 0.05f;
+                AnimateSurface();
+                needsRender = true;
+            }
+
+            if (needsRender)
+            {
                 Render();
             }
         }
@@ -322,6 +343,44 @@ namespace BezierSurface
             float y = lightRadius * (float)Math.Sin(lightAngle);
 
             baseLightDirection = new Vector3(x, y, z);
+        }
+
+        private void StoreOriginalControlPoints()
+        {
+            if (bezierSurface == null) return;
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    originalControlPoints[i, j] = bezierSurface.ControlPoints[i, j];
+                }
+            }
+        }
+
+        private void AnimateSurface()
+        {
+            if (bezierSurface == null) return;
+
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    Vector3 original = originalControlPoints[i, j];
+                    
+                    float wave1 = (float)Math.Sin(surfaceAnimationTime + i * 0.5f) * 0.3f;
+                    float wave2 = (float)Math.Cos(surfaceAnimationTime + j * 0.5f) * 0.3f;
+                    float zOffset = wave1 + wave2;
+
+                    bezierSurface.ControlPoints[i, j] = new Vector3(
+                        original.X, 
+                        original.Y, 
+                        original.Z + zOffset
+                    );
+                }
+            }
+
+            GenerateMesh();
         }
 
         private void GenerateMesh()
