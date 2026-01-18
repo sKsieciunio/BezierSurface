@@ -1,5 +1,7 @@
 # Bezier Surface Renderer
 
+![image](docs/image.png)
+
 A C# Windows Forms application for rendering and interacting with 3D Bezier surfaces.
 
 ## Features
